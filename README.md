@@ -1,6 +1,7 @@
 # [UI UX Pro Max](https://uupm.cc)
 
 <p align="center">
+  <a href="https://github.com/nextlevelbuilder/ui-ux-pro-max-skill/blob/main/README.az.md">🇦🇿 Azərbaycanca</a> |
   <a href="https://github.com/nextlevelbuilder/ui-ux-pro-max-skill/blob/main/README.id.md">🇮🇩 Bahasa Indonesia</a> |
   <a href="https://github.com/nextlevelbuilder/ui-ux-pro-max-skill/blob/main/README.ko.md">🇰🇷 한국어</a> |
   <a href="https://github.com/nextlevelbuilder/ui-ux-pro-max-skill/blob/main/README.vi.md">🇻🇳 Tiếng Việt</a> |
@@ -289,6 +290,10 @@ uipro init --ai warp        # Warp
 uipro init --ai augment     # Augment
 uipro init --ai codewhale   # CodeWhale
 uipro init --ai zcode       # ZCode
+uipro init --ai kimi        # Kimi Code
+uipro init --ai amazonq     # Amazon Q Developer
+uipro init --ai openclaw    # OpenClaw (.agents/skills/)
+uipro init --ai autoclaw    # AutoClaw (skills/ or ~/.openclaw-autoclaw/skills)
 uipro init --ai universal   # Universal / Agent Standard (.agents/skills/)
 uipro init --ai all         # All assistants
 ```
@@ -301,6 +306,7 @@ The npm package is `ui-ux-pro-max-cli`; it still installs the `uipro` command. O
 uipro init --ai claude --global   # Install to ~/.claude/skills/
 uipro init --ai cursor --global   # Install to ~/.cursor/skills/
 uipro init --ai zcode --global    # Install to ~/.zcode/skills/
+uipro init --ai kimi --global     # Install to ~/.kimi-code/skills/
 uipro init --ai universal --global # Install to ~/.agents/skills/
 ```
 
@@ -333,7 +339,7 @@ If it is missing, install it yourself from [python.org](https://www.python.org/d
 
 ### Skill Mode (Auto-activate)
 
-**Supported:** Claude Code, Cursor, Windsurf, Antigravity, Codex CLI, Continue, Gemini CLI, OpenCode, Qoder, CodeBuddy, Droid (Factory), KiloCode, Warp, Augment, CodeWhale, ZCode
+**Supported:** Claude Code, Cursor, Windsurf, Antigravity, Codex CLI, Continue, Gemini CLI, OpenCode, Qoder, CodeBuddy, Droid (Factory), KiloCode, Warp, Augment, CodeWhale, ZCode, Kimi Code, Amazon Q Developer, OpenClaw, GitHub Copilot
 
 The skill activates automatically when you request UI/UX work. Just chat naturally:
 
@@ -345,7 +351,7 @@ Build a landing page for my SaaS product
 
 ### Workflow Mode (Slash Command)
 
-**Supported:** Kiro, GitHub Copilot, Roo Code, KiloCode
+**Supported:** Kiro, Roo Code, KiloCode
 
 Use the slash command to invoke the skill:
 
@@ -366,6 +372,32 @@ Make a mobile app UI for e-commerce
 
 Build a fintech banking app with dark theme
 ```
+
+### Apply a theme to an existing app
+
+After [installing the skill](#installation), open your app in your AI assistant and use a prompt like this. In Workflow Mode, prefix it with `/ui-ux-pro-max`.
+
+```text
+Use the ui-ux-pro-max skill to retheme my existing React app.
+Target style: Minimalism & Swiss Style.
+First inspect the framework and styling-library versions, routes, components,
+styles, and existing theme tokens. Keep the current component structure,
+behavior, and business logic.
+Reuse and update the existing semantic tokens for colors, typography, spacing,
+radii, shadows, and interaction states; add missing tokens rather than creating
+a parallel theme system. Replace hard-coded styles one component at a time.
+Verify contrast, keyboard focus, responsive layouts, and all supported light/dark
+modes. Summarize changed files and any remaining hard-coded styles.
+```
+
+Replace `Minimalism & Swiss Style` with your preferred [catalog style](src/ui-ux-pro-max/data/styles.csv) or visual direction. Search results provide design guidance; they do not automatically rewrite your app.
+
+**Theme migration checklist:**
+
+- **Audit:** Find theme-related hard-coded values in stylesheets, inline styles, and utilities such as `bg-blue-600` or `text-[#1e293b]`.
+- **Map:** Reuse semantic roles such as `background`, `surface`, `foreground`, `primary`, `border`, and `ring` in the app's existing styling system. Add missing roles using its installed library version's conventions.
+- **Migrate:** Replace hard-coded values with token references in small component batches. Changing tokens alone will not affect styles that do not use them.
+- **Verify:** Check text/UI contrast, hover/focus/disabled states, responsive layouts, and each supported theme after every batch.
 
 ### How It Works
 
@@ -394,11 +426,19 @@ The skill provides stack-specific guidelines for:
 
 Just mention your preferred stack in the prompt, or let it default to HTML + Tailwind.
 
+## Examples
+
+### Before/after: ops dashboard
+
+A plain ops dashboard ([before](https://skill-fixture-before.theroost.dev)) restyled using only the design system UI UX Pro Max generated for it ([after](https://ui-ux-pro-max-after.theroost.dev)), from `search.py "internal operations dashboard" --design-system --density 8 --motion 3 --variance 4`.
+
+*Illustrative, community-contributed example; not an official demo, benchmark, or runtime test of the skill.*
+
 ## Design System Command (Advanced)
 
 For direct access to the design system generator:
 
-> Note: If you installed via Continue, replace `.claude/skills/` with `.continue/skills/` in the commands below. For Droid (Factory), use `.factory/skills/`. For ZCode, use `.zcode/skills/`.
+> Note: If you installed via Continue, replace `.claude/skills/` with `.continue/skills/` in the commands below. For Droid (Factory), use `.factory/skills/`. For ZCode, use `.zcode/skills/`. For Amazon Q Developer, use `.amazonq/skills/` (Amazon Q only auto-loads the rule at `.amazonq/rules/ui-ux-pro-max.md`; the data and scripts under `.amazonq/skills/` are files the rule points to).
 
 ```bash
 # Generate design system with ASCII output
@@ -418,6 +458,10 @@ python3 .claude/skills/ui-ux-pro-max/scripts/search.py "orphan heading line bala
 python3 .claude/skills/ui-ux-pro-max/scripts/search.py "badge chip label wraps to second line" --domain ux
 python3 .claude/skills/ui-ux-pro-max/scripts/search.py "rapid chip animation interrupted" --domain ux
 
+# RTL / Arabic, Hebrew, Persian interfaces (style and product domains)
+python3 .claude/skills/ui-ux-pro-max/scripts/search.py "dashboard" --domain style --rtl=full
+python3 .claude/skills/ui-ux-pro-max/scripts/search.py "fintech" --domain product --rtl=partial
+
 # Stack-specific guidelines
 python3 .claude/skills/ui-ux-pro-max/scripts/search.py "form validation" --stack react
 python3 .claude/skills/ui-ux-pro-max/scripts/search.py "responsive layout" --stack html-tailwind
@@ -432,6 +476,30 @@ active guidance. Explicit legacy terms or older majors (for example, `Svelte 4`
 or `Next.js 15`) return only curated legacy rows, labeled by `Status` and
 `Applies To`; when no matching legacy guidance is curated, search returns no
 results instead of mixing framework generations.
+
+### RTL Compatibility (`--rtl`)
+
+Every style and product row carries an `rtl_level` for right-to-left interfaces
+(Arabic, Hebrew, Persian, Urdu):
+
+| Level | Meaning |
+|-------|---------|
+| `full` | Direction-agnostic: the layout survives mirroring unchanged. |
+| `partial` | Mirrors cleanly, but individual components and motion need adjustment. |
+| `caveats` | The style or product encodes reading direction (kinetic typography, LTR timelines, code/terminal surfaces, maps and seat ordering). |
+
+```bash
+# Only styles that mirror without extra work
+python3 .claude/skills/ui-ux-pro-max/scripts/search.py "dashboard" --domain style --rtl=full
+
+# All levels, filtered results still tagged with rtl_level
+python3 .claude/skills/ui-ux-pro-max/scripts/search.py "mobile" --domain style --rtl
+```
+
+`--rtl` requires an explicit `--domain style` or `--domain product`. The filter
+is applied after ranking but before `-n/--max-results` truncation, so a narrow
+limit never hides a matching row. It is rejected with `--design-system` and
+`--stack`.
 
 ### Persist Design System (Master + Overrides Pattern)
 
